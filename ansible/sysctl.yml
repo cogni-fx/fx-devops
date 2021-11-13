@@ -1,0 +1,15 @@
+---
+- name: Manage Docker configuration
+  collections:
+    - debops.debops
+
+  hosts:
+    - fxcore_testnet
+  become: True
+
+  roles:
+
+    - role: sysctl
+      tags:
+        - role::docker_server
+        - skip::docker_server
