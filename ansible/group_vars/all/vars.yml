@@ -2,21 +2,8 @@
 # Manage Advanced Package Manager configuration.
 apt__enabled: True
 
-# Add APT GPG keys.
-apt__keys:
-  - url: https://download.docker.com/linux/ubuntu/gpg
-
-# List of APT packages to install.
-apt__packages:
-  - docker-ce
-  - docker-ce-cli
-  - docker-compose
-
-# Add APT repositories.
-apt__repositories:
-  - repo: >-
-      deb https://download.docker.com/linux/ubuntu
-      {{ ansible_distribution_release }} stable
+# Install the upstream version of Docker.
+docker_server__upstream: True
 
 # Lists of FQDN hostnames which should be added to systemwide.
 sshd__known_hosts:
