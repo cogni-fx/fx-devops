@@ -1,4 +1,12 @@
 ---
+# Manage package configuration.
+apt_install__enabled: True
+
+# List of APT packages to install.
+apt_install__packages:
+  - docker-ce
+  - docker-compose
+
 # Manage UNIX user accounts.
 users__accounts:
 

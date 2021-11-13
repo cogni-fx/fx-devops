@@ -1,0 +1,14 @@
+---
+- name: Manage Docker configuration
+  collections:
+    - debops.debops
+
+  hosts: fxcore_testnet
+  become: True
+
+  roles:
+
+    - role: apt_install
+      tags:
+        - role::apt_install
+        - skip::apt_install
