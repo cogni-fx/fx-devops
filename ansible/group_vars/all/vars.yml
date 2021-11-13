@@ -16,4 +16,14 @@ unattended_upgrades__enabled: True
 users__enabled: True
 
 # Manage the kernel configuration.
-sysctl__enabled: True
+sysctl__enabled: False
+
+# List of UNIX system user accounts to manage.
+system_users__accounts:
+
+  - name: 'ansible'
+    # sshkeys:
+    # - 'ssh-ed25519 ...'
+
+# Ansible manage system user accounts.
+system_users__enabled: False
