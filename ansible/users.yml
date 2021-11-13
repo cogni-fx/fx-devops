@@ -1,0 +1,14 @@
+---
+- name: Manage local users and groups
+  collections:
+    - debops.debops
+
+  hosts: fxcore_testnet
+  become: True
+
+  roles:
+
+    - role: users
+      tags:
+        - role::users
+        - skip::users

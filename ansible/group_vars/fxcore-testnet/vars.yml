@@ -1,0 +1,18 @@
+---
+# Manage UNIX user accounts.
+users__accounts:
+
+  - name: fxcore
+    groups:
+      - docker
+    shell: /bin/bash
+
+# Enables debops.users to manage user accounts.
+users__enabled: True
+
+# Manage different UNIX groups.
+users__groups:
+
+  - name: 'docker'
+    user: False
+    system: True
