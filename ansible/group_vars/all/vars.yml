@@ -1,0 +1,16 @@
+---
+# Manage Advanced Package Manager configuration.
+apt__enabled: True
+
+# List of APT packages to install.
+apt__packages:
+  # - docker-ce
+  # - docker-ce-cli
+  - docker-compose
+
+# Lists of FQDN hostnames which should be added to systemwide.
+sshd__known_hosts:
+  - github.com
+
+# Enables debops.users to manage user accounts.
+users__enabled: True

@@ -3,12 +3,14 @@
   collections:
     - debops.debops
 
-  hosts: fxcore_testnet
+  hosts:
+    - fxcore_testnet
+    - fxcore_mainnet
   become: True
 
   roles:
 
-    - role: apt_install
+    - role: apt
       tags:
-        - role::apt_install
-        - skip::apt_install
+        - role::apt
+        - skip::apt

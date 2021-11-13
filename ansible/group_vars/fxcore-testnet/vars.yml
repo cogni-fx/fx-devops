@@ -1,16 +1,4 @@
 ---
-# Manage package configuration.
-apt_install__enabled: True
-
-# List of APT packages to install.
-apt_install__packages:
-  - docker-ce
-  - docker-compose
-
-# Lists of FQDN hostnames which should be added to systemwide.
-sshd__known_hosts:
-  - github.com
-
 # Manage UNIX user accounts.
 users__accounts:
 
@@ -18,13 +6,3 @@ users__accounts:
     groups:
       - docker
     shell: /bin/bash
-
-# Enables debops.users to manage user accounts.
-users__enabled: True
-
-# Manage different UNIX groups.
-users__groups:
-
-  - name: 'docker'
-    user: False
-    system: True
