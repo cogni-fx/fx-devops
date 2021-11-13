@@ -2,11 +2,19 @@
 # Manage Advanced Package Manager configuration.
 apt__enabled: True
 
+# Add APT GPG keys.
+apt__keys:
+  - url: https://download.docker.com/linux/ubuntu/gpg
+
 # List of APT packages to install.
 apt__packages:
-  # - docker-ce
-  # - docker-ce-cli
+  - docker-ce
+  - docker-ce-cli
   - docker-compose
+
+# Add APT repositories.
+apt__repositories:
+  - repo: deb https://download.docker.com/linux/ubuntu groovy stable
 
 # Lists of FQDN hostnames which should be added to systemwide.
 sshd__known_hosts:
