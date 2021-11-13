@@ -20,5 +20,8 @@ apt__repositories:
 sshd__known_hosts:
   - github.com
 
+# Manage unattended package upgrades.
+unattended_upgrades__enabled: True
+
 # Enables debops.users to manage user accounts.
 users__enabled: True

@@ -1,0 +1,18 @@
+---
+- name: Unattended upgrades
+  become: True
+  collections:
+    - debops.debops
+
+  hosts:
+    - fxcore_testnet
+    - fxcore_mainnet
+
+  pre_tasks:
+
+  roles:
+
+    - role: unattended_upgrades
+      tags:
+        - role::unattended_upgrades
+        - skip::unattended_upgrades
