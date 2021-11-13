@@ -7,6 +7,10 @@ apt_install__packages:
   - docker-ce
   - docker-compose
 
+# Lists of FQDN hostnames which should be added to systemwide.
+sshd__known_hosts:
+  - github.com
+
 # Manage UNIX user accounts.
 users__accounts:
 

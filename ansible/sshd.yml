@@ -1,0 +1,23 @@
+---
+- name: Manage SSHD configuration
+  become: True
+  collections:
+    - debops.debops
+
+  hosts: fxcore_testnet
+
+  pre_tasks:
+
+    - name: Prepare sshd environment
+      import_role:
+        name: sshd
+        tasks_from: main_env
+      tags:
+        - role::sshd
+
+  roles:
+
+    - role: sshd
+      tags:
+        - role::sshd
+        - skip::sshd
