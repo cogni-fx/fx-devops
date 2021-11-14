@@ -1,4 +1,7 @@
 ---
+# Enables debops.users to manage user accounts.
+users__enabled: True
+
 # Manage UNIX user accounts.
 users__accounts:
 
