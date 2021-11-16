@@ -11,6 +11,10 @@
   roles:
 
     - role: python
+      python__dependent_packages2:
+        - '{{ docker_server__python__dependent_packages2 }}'
+      python__dependent_packages3:
+        - '{{ docker_server__python__dependent_packages3 }}'
       tags:
         - role::docker_server
         - role::python
