@@ -1,4 +1,9 @@
 ---
+fxcore_docker_volume_names:
+  - fxcore-testnet-config
+  - fxcore-testnet-data
+fxcore_docker_volume_path: /var/opt
+
 # Enables debops.users to manage user accounts.
 users__enabled: True
 

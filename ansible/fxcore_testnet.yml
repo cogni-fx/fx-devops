@@ -1,0 +1,44 @@
+---
+- name: Manage Docker configuration
+  collections:
+    - debops.debops
+
+  hosts:
+    - fxcore_testnet
+  become: True
+  become_flags: -i
+
+  tasks:
+    - name: Admin tasks
+      block:
+        - name: Volume directories
+          file:
+            path: '{{ fxcore_docker_volume_path ~ "/" ~ item }}'
+            state: directory
+            mode: u=rwx,g=rx,o=
+          loop: '{{ fxcore_docker_volume_names }}'
+
+    - name: User tasks
+      become_user: fxcore
+      block:
+        - name: Git repo
+          ansible.builtin.git:
+            dest: fx-core-docker
+            repo: https://github.com/cogni-fx/fx-core-docker.git
+            version: main
+          become_user: fxcore
+
+        - name: Docker volumes
+          community.docker.docker_volume:
+            name: '{{ item }}'
+            driver_options:
+              device: '{{ fxcore_docker_volume_path ~ "/" ~ item }}'
+              o: bind
+              type: none
+          loop: '{{ fxcore_docker_volume_names }}'
+
+        - name: Run docker-compose build
+          community.docker.docker_compose:
+            build: yes
+            project_src: fx-core-docker/testnet
+          register: output
