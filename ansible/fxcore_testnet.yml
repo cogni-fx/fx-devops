@@ -1,5 +1,5 @@
 ---
-- name: Manage Docker configuration
+- name: Manage node setup
   collections:
     - debops.debops
 
@@ -15,18 +15,21 @@
           file:
             path: '{{ fxcore_docker_volume_path ~ "/" ~ item }}'
             state: directory
-            mode: u=rwx,g=rx,o=
+            mode: u=rwx,g=rwx,o=
           loop: '{{ fxcore_docker_volume_names }}'
 
     - name: User tasks
       become_user: fxcore
       block:
         - name: Git repo
+          become_user: fxcore
           ansible.builtin.git:
             dest: fx-core-docker
             repo: https://github.com/cogni-fx/fx-core-docker.git
             version: main
-          become_user: fxcore
+          register: git_res
+        - debug:
+            var: git_res
 
         - name: Docker volumes
           community.docker.docker_volume:
@@ -37,8 +40,10 @@
               type: none
           loop: '{{ fxcore_docker_volume_names }}'
 
-        - name: Run docker-compose build
+        - name: Run Docker Compose
           community.docker.docker_compose:
-            build: yes
+            build: "{{ git_res.changed }}"
             project_src: fx-core-docker/testnet
+            remove_orphans: "{{ git_res.changed }}"
+            restarted: "{{ git_res.changed }}"
           register: output
