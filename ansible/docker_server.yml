@@ -8,6 +8,12 @@
     - fxcore_testnet
   become: True
 
+  tasks:
+    - name: Pip3 packages
+      pip:
+        name: "{{ item }}"
+      loop: "{{ docker_server__default_pip3_packages }}"
+
   roles:
 
     - role: python
