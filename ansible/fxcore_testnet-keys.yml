@@ -1,0 +1,82 @@
+---
+- name: Manage node keys
+  collections:
+    - debops.debops
+
+  hosts:
+    - fxcore_testnet
+
+  become: true
+  become_flags: -i
+  become_user: fxcore
+
+  tasks:
+
+    - name: Run Docker Compose
+      community.docker.docker_compose:
+        project_src: fx-core-docker/testnet
+      register: docker_res
+
+    - name: Create fact
+      set_fact:
+        docker_id: "{{ docker_res.services.node.keys() | first }}"
+
+    - name: Status
+      changed_when: false
+      check_mode: false  # Force run during check mode.
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - status
+        container: '{{ docker_id }}'
+      register: result_status
+
+    - name: List keys
+      changed_when: false
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - keys
+          - list
+          - --output
+          - json
+        container: '{{ docker_id }}'
+      register: result_keys_list
+
+    - name: Set list of keys to add
+      set_fact:
+        keys_to_add: >-
+          '{{ fxcore_fxcored_keys | json_query('[].name')
+          | difference(result_keys_list.stdout
+            | from_json | json_query('[].name')) }}'
+
+    - name: Add keys
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - keys
+          - add
+          - '{{ item.name }}'
+          - '{{ "--dry-run" if ansible_check_mode else "--trace" }}'
+          - --index
+          - '{{ item.index | default(0) }}'
+          - --output
+          - json
+          - --recover
+          - --trace
+        container: '{{ docker_id }}'
+        stdin: '{{ item.seed }}'
+      loop: "{{ fxcore_fxcored_keys | selectattr('name', 'in', keys_to_add) }}"
+      no_log: true
+      register: result_keys_add
+
+    - name: Status
+      changed_when: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - status
+        container: '{{ docker_id }}'
+      register: result_status
