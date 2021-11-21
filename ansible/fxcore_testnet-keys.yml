@@ -17,19 +17,9 @@
         project_src: fx-core-docker/testnet
       register: docker_res
 
-    - name: Create fact
+    - name: Set fact
       set_fact:
         docker_id: "{{ docker_res.services.node.keys() | first }}"
-
-    - name: Status
-      changed_when: false
-      check_mode: false  # Force run during check mode.
-      community.docker.docker_container_exec:
-        argv:
-          - /usr/bin/fxcored
-          - status
-        container: '{{ docker_id }}'
-      register: result_status
 
     - name: List keys
       changed_when: false
@@ -72,11 +62,11 @@
       no_log: true
       register: result_keys_add
 
-    - name: Status
+    - name: Node Status
       changed_when: false
       community.docker.docker_container_exec:
         argv:
           - /usr/bin/fxcored
           - status
         container: '{{ docker_id }}'
-      register: result_status
+      register: node_status
