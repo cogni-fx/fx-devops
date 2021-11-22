@@ -1,6 +1,15 @@
 ---
 # Manage Advanced Package Manager configuration.
 apt__enabled: true
+apt__keys:
+  - url: https://download.docker.com/linux/ubuntu/gpg
+apt__packages:
+  - docker-ce
+apt__repositories:
+  - repo: >-
+      deb https://download.docker.com/linux/ubuntu
+      {{ ansible_distribution_release }}
+      stable
 
 docker_server__python__dependent_packages3:
   - python3-dev
@@ -29,7 +38,7 @@ python__enabled: true
 # List of Python 3 packages to install via PIP.
 docker_server__default_pip3_packages:
   - docker
-  - docker-compose
+  #- docker-compose
   - jmespath
 
 docker_server__dns_nameserver: ''
@@ -56,13 +65,25 @@ sysctl__enabled: false
 system_users__accounts:
 
   - name: ansible
-  # sshkeys:
-  #   - ssh-ed25519 ...
+    admin: true
+    groups:
+      - sudo
+    sshkeys:
+      - 'ssh-ed25519 {{ ansible_ssh_key }}'
+
+# Manage different UNIX groups.
+users__groups:
+
+  - name: sudo
+    user: False
 
 # List of base APT packages to install.
-system_users__base_packages:
+users__base_packages:
   - acl
   - libuser
+
+# List of base APT packages to install.
+system_users__base_packages: '{{ users__base_packages }}'
 
 # Ansible manage system user accounts.
 system_users__enabled: true
