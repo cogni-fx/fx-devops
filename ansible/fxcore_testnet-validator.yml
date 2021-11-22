@@ -68,7 +68,9 @@
 
     - name: Set command args
       set_fact:
-        fxcored_args: '{{ (fxcored_args | default([])) + ["--" ~ item.key] + [item.value] }}'
+        fxcored_args: >-
+          '{{ (fxcored_args | default([]))
+          + ["--" ~ item.key] + [item.value] }}'
       loop: '{{ fxcore_fxcored_validator | dict2items }}'
 
     - debug:
