@@ -57,7 +57,12 @@ system_users__accounts:
 
   - name: ansible
     # sshkeys:
-    # - 'ssh-ed25519 ...'
+    #   - ssh-ed25519 ...
+
+# List of base APT packages to install.
+system_users__base_packages:
+  - acl
+  - libuser
 
 # Ansible manage system user accounts.
-system_users__enabled: False
+system_users__enabled: True
