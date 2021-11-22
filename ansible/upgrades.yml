@@ -5,7 +5,7 @@
     - debops.debops
 
   hosts:
-    - fxcore_testnet
+    - fxcore
     - fxcore_mainnet
 
   pre_tasks:

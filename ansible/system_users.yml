@@ -3,7 +3,7 @@
   collections:
     - debops.debops
 
-  hosts: fxcore_testnet
+  hosts: fxcore
   become: True
 
   roles:

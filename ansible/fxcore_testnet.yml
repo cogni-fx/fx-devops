@@ -4,7 +4,7 @@
     - debops.debops
 
   hosts:
-    - fxcore_testnet
+    - fxcore
   become: True
   become_flags: -i
 

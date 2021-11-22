@@ -4,7 +4,7 @@
   collections:
     - debops.debops
 
-  hosts: fxcore_testnet
+  hosts: fxcore
 
   pre_tasks:
 
