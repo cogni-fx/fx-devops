@@ -14,7 +14,7 @@
 
     - name: Run Docker Compose
       community.docker.docker_compose:
-        project_src: fx-core-docker/testnet
+        project_src: fx-core-docker/{{ fxcore_network }}
       register: docker_res
 
     - name: Set fact

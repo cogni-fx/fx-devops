@@ -12,10 +12,3 @@
       tags:
         - role::apt
         - skip::apt
-      vars:
-        apt__packages: []
-
-    - role: apt
-      tags:
-        - role::apt
-        - skip::apt

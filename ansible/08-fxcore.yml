@@ -3,8 +3,7 @@
   collections:
     - debops.debops
 
-  hosts:
-    - fxcore
+  hosts: fxcore
   become: true
   become_flags: -i
 
@@ -43,7 +42,8 @@
         - name: Run Docker Compose
           community.docker.docker_compose:
             build: "{{ git_res.changed }}"
-            project_src: fx-core-docker/testnet
+            project_src: fx-core-docker/{{ fxcore_network }}
             remove_orphans: "{{ git_res.changed }}"
             restarted: "{{ git_res.changed }}"
           register: output
+          when: not ansible_check_mode
