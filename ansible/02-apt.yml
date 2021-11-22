@@ -3,12 +3,17 @@
   collections:
     - debops.debops
 
-  hosts:
-    - fxcore
-    - fxcore_mainnet
+  hosts: fxcore
   become: true
 
   roles:
+
+    - role: apt
+      tags:
+        - role::apt
+        - skip::apt
+      vars:
+        apt__packages: []
 
     - role: apt
       tags:

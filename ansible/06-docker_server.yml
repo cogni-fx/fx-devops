@@ -26,6 +26,13 @@
         - role::python
         - skip::python
 
+    - role: apt
+      tags:
+        - role::apt
+        - skip::apt
+      vars:
+        apt__packages: []
+
     - role: docker_server
       tags:
         - role::docker_server
