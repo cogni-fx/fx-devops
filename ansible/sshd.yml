@@ -1,6 +1,6 @@
 ---
 - name: Manage SSHD configuration
-  become: True
+  become: true
   collections:
     - debops.debops
 

@@ -6,7 +6,7 @@
 
   hosts:
     - fxcore
-  become: True
+  become: true
 
   tasks:
     - name: Pip3 packages

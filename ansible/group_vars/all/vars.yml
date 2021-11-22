@@ -1,6 +1,6 @@
 ---
 # Manage Advanced Package Manager configuration.
-apt__enabled: True
+apt__enabled: true
 
 docker_server__python__dependent_packages3:
   - python3-dev
@@ -9,7 +9,7 @@ docker_server__python__dependent_packages3:
   - python3-virtualenv
 
 # Install the upstream version of Docker.
-docker_server__upstream: True
+docker_server__upstream: true
 
 # List of fxcored keys.
 fxcore_fxcored_keys: []
@@ -24,7 +24,7 @@ python__base_packages2:
   - python-setuptools
 
 # Python management.
-python__enabled: True
+python__enabled: true
 
 # List of Python 3 packages to install via PIP.
 docker_server__default_pip3_packages:
@@ -40,24 +40,24 @@ docker_server__python__dependent_packages2:
   - python-dev
 
 # Enable support for Python 3 management.
-python__v3: True
+python__v3: true
 
 # Lists of FQDN hostnames which should be added to systemwide.
 sshd__known_hosts:
   - github.com
 
 # Manage unattended package upgrades.
-unattended_upgrades__enabled: True
+unattended_upgrades__enabled: true
 
 # Manage the kernel configuration.
-sysctl__enabled: False
+sysctl__enabled: false
 
 # List of UNIX system user accounts to manage.
 system_users__accounts:
 
   - name: ansible
-    # sshkeys:
-    #   - ssh-ed25519 ...
+  # sshkeys:
+  #   - ssh-ed25519 ...
 
 # List of base APT packages to install.
 system_users__base_packages:
@@ -65,4 +65,4 @@ system_users__base_packages:
   - libuser
 
 # Ansible manage system user accounts.
-system_users__enabled: True
+system_users__enabled: true

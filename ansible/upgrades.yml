@@ -1,6 +1,6 @@
 ---
 - name: Unattended upgrades
-  become: True
+  become: true
   collections:
     - debops.debops
 
