@@ -69,12 +69,8 @@
     - name: Set command args
       set_fact:
         fxcored_args: >-
-          '{{ (fxcored_args | default([]))
-          + ["--" ~ item.key] + [item.value] }}'
+          {{ (fxcored_args | default([])) + ["--" ~ item.key] + [item.value] }}
       loop: '{{ fxcore_fxcored_validator | dict2items }}'
-
-    - debug:
-        var: fxcored_args
 
     - name: Update validator details
       check_mode: false
@@ -85,7 +81,6 @@
           + fxcored_args
           + ["--dry-run" if ansible_check_mode else "--trace"]
           + ["--yes"]
-          + ["--dry-run"]
           }}
         chdir: '{{ fxcore_fxcored_home }}'
         container: '{{ docker_id }}'
