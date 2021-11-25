@@ -37,7 +37,8 @@
       register: md5_key_res
       loop: '{{ fxcore_validator_keys.keys() }}'
 
-    - name: Update key files (test)
+    # @fixme: refactor this task when files are missing
+    - name: Update key files
       community.docker.docker_container_exec:
         argv:
           - tee
@@ -52,9 +53,9 @@
       register: result_status
       when:
         - >-
+          md5_key_res.results[item_index].rc == 1 or
           md5_key_res.results[item_index].stdout.split("  ")[0] !=
           (( item.value | to_json ~ '\n') | md5)
-          or md5_key_res.results[item_index].rc == 1
 
     - name: Node Status
       changed_when: false
@@ -71,6 +72,7 @@
         fxcored_args: >-
           {{ (fxcored_args | default([])) + ["--" ~ item.key] + [item.value] }}
       loop: '{{ fxcore_fxcored_validator | dict2items }}'
+      when: fxcore_fxcored_validator is defined
 
     - name: Update validator details
       check_mode: false
@@ -85,4 +87,6 @@
         chdir: '{{ fxcore_fxcored_home }}'
         container: '{{ docker_id }}'
       register: update_res
-      when: not (node_status.stderr | from_json).SyncInfo.catching_up
+      when:
+        - fxcored_args is defined
+        - not (node_status.stderr | from_json).SyncInfo.catching_up

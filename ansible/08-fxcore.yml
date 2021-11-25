@@ -20,15 +20,14 @@
     - name: User tasks
       become_user: fxcore
       block:
-        - name: Git repo
-          become_user: fxcore
-          ansible.builtin.git:
+        - ansible.builtin.git:
             dest: fx-core-docker
+            force: true
             repo: https://github.com/cogni-fx/fx-core-docker.git
             version: main
+          become_user: fxcore
+          name: Git repo
           register: git_res
-        - debug:
-            var: git_res
 
         - name: Docker volumes
           community.docker.docker_volume:
