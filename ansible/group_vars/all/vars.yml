@@ -1,10 +1,14 @@
 ---
+ansible_ssh_key: ''
 # Manage Advanced Package Manager configuration.
 apt__enabled: true
 apt__keys:
   - url: https://download.docker.com/linux/ubuntu/gpg
 apt__packages:
+  - binutils
   - docker-ce
+  - git
+  - net-tools
 apt__repositories:
   - repo: >-
       deb https://download.docker.com/linux/ubuntu
@@ -35,10 +39,14 @@ python__base_packages2:
 # Python management.
 python__enabled: true
 
+# List of Python 2 packages to install via PIP.
+docker_server__default_pip_packages:
+  - name: 'docker'
+
 # List of Python 3 packages to install via PIP.
 docker_server__default_pip3_packages:
   - docker
-  #- docker-compose
+  - docker-compose
   - jmespath
 
 docker_server__dns_nameserver: ''
