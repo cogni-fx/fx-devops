@@ -83,6 +83,7 @@
           + fxcored_args
           + ["--dry-run" if ansible_check_mode else "--trace"]
           + ["--yes"]
+          + ["--dry-run"]
           }}
         chdir: '{{ fxcore_fxcored_home }}'
         container: '{{ docker_id }}'

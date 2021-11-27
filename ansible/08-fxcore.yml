@@ -42,7 +42,7 @@
           community.docker.docker_compose:
             build: "{{ git_res.changed }}"
             project_src: fx-core-docker/{{ fxcore_network }}
-            #pull: "{{ git_res.changed }}"
+            # pull: "{{ git_res.changed }}"
             remove_orphans: "{{ git_res.changed }}"
             restarted: "{{ git_res.changed }}"
           register: output

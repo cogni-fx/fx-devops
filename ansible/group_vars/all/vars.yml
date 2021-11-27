@@ -24,6 +24,14 @@ docker_server__python__dependent_packages3:
 # Install the upstream version of Docker.
 docker_server__upstream: true
 
+# Config values.
+fxcore_fxcored_config:
+  app.toml:
+    API.Enable: false
+  config.toml:
+    log_level: info
+    #moniker: Foo
+
 # List of fxcored keys.
 fxcore_fxcored_keys: []
 
