@@ -84,3 +84,9 @@
       loop: '{{ fxcore_fxcored_config["config.toml"] | dict2items }}'
       register: config_config_res
       when: fxcore_fxcored_config["config.toml"] is defined
+
+    - name: Docker Compose
+      community.docker.docker_compose:
+        project_src: fx-core-docker/{{ fxcore_network }}
+        restarted: true
+      when: not ansible_check_mode
