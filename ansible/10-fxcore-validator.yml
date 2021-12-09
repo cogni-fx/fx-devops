@@ -83,11 +83,43 @@
           + fxcored_args
           + ["--dry-run" if ansible_check_mode else "--trace"]
           + ["--yes"]
-          + ["--dry-run"]
           }}
         chdir: '{{ fxcore_fxcored_home }}'
         container: '{{ docker_id }}'
       register: update_res
       when:
         - fxcored_args is defined
+        - not (node_status.stderr | from_json).SyncInfo.catching_up
+
+    - name: Validator info
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - tendermint
+          - show-validator
+        chdir: '{{ fxcore_fxcored_home }}'
+        container: '{{ docker_id }}'
+      register: validator_info
+      when:
+        - not (node_status.stderr | from_json).SyncInfo.catching_up
+
+    - meta: end_play
+
+    - name: Unjail validator
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - tx
+          - slashing
+          - unjail
+          - --from
+          - '{{ fxcore_fxcored_validator.from }}'
+          - '{{ "--dry-run" if ansible_check_mode else "--trace" }}'
+          - --yes
+          - --dry-run
+        chdir: '{{ fxcore_fxcored_home }}'
+        container: '{{ docker_id }}'
+      when:
         - not (node_status.stderr | from_json).SyncInfo.catching_up
