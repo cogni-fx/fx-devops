@@ -1,0 +1,17 @@
+---
+- name: Manage kernel modules
+  become: true
+  collections:
+    - debops.debops
+    - debops.roles01
+
+  hosts: fxcore
+
+  pre_tasks:
+
+  roles:
+
+    - role: kmod
+      tags:
+        - role::kmod
+        - skip::kmod
