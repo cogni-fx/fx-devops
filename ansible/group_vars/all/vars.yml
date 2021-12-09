@@ -29,7 +29,7 @@ fxcore_fxcored_config:
   app.toml:
     API.Enable: false
   config.toml:
-    log_level: info
+    log_level: warn
     #moniker: Foo
 
 # List of fxcored keys.
@@ -37,6 +37,13 @@ fxcore_fxcored_keys: []
 
 # Home path for config and data.
 fxcore_fxcored_home: /home/fxcore/.fxcore
+
+# Manage kernel modules.
+kmod__modules:
+
+  - name: 'floppy'
+    state: 'blacklist'
+    comment: 'Disable Floppy support'
 
 # List of base Python 2 packages to install via APT.
 python__base_packages2:
