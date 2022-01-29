@@ -52,6 +52,8 @@
           - '{{ "--dry-run" if ansible_check_mode else "--trace" }}'
           - --index
           - '{{ item.index | default(0) }}'
+          - --keyring-backend
+          - test
           - --output
           - json
           - --recover
