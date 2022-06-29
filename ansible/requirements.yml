@@ -3,4 +3,5 @@
 # ansible-galaxy install -r requirements.yml
 ---
 collections:
+  - name: community.docker
   - name: debops.debops

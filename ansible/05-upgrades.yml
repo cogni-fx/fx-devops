@@ -1,12 +1,10 @@
 ---
 - name: Unattended upgrades
-  become: True
+  become: true
   collections:
     - debops.debops
 
-  hosts:
-    - fxcore_testnet
-    - fxcore_mainnet
+  hosts: fxcore
 
   pre_tasks:
 

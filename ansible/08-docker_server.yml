@@ -1,0 +1,39 @@
+---
+- name: Manage Docker configuration
+  collections:
+    - debops.debops
+    - debops.roles01
+
+  hosts:
+    - fxcore
+  become: true
+
+  tasks:
+    - name: Pip3 packages
+      pip:
+        name: "{{ item }}"
+      loop: "{{ docker_server__default_pip3_packages }}"
+
+  roles:
+
+    - role: python
+      python__dependent_packages2:
+        - '{{ docker_server__python__dependent_packages2 }}'
+      python__dependent_packages3:
+        - '{{ docker_server__python__dependent_packages3 }}'
+      tags:
+        - role::docker_server
+        - role::python
+        - skip::python
+
+    - role: apt
+      tags:
+        - role::apt
+        - skip::apt
+      vars:
+        apt__packages: []
+
+    - role: docker_server
+      tags:
+        - role::docker_server
+        - skip::docker_server

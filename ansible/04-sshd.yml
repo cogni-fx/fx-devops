@@ -1,10 +1,10 @@
 ---
 - name: Manage SSHD configuration
-  become: True
+  become: true
   collections:
     - debops.debops
 
-  hosts: fxcore_testnet
+  hosts: fxcore
 
   pre_tasks:
 

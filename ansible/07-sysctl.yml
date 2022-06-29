@@ -4,8 +4,8 @@
     - debops.debops
 
   hosts:
-    - fxcore_testnet
-  become: True
+    - fxcore
+  become: true
 
   roles:
 

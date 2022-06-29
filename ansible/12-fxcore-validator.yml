@@ -1,0 +1,138 @@
+---
+- name: Manage node validator
+  collections:
+    - debops.debops
+
+  hosts:
+    - fxcore
+
+  become: true
+  become_flags: -i
+  become_user: fxcore
+
+  tasks:
+
+    - name: Check Docker containers
+      community.docker.docker_container_info:
+        name: fxcore-mainnnet
+      register: docker_info
+
+    - debug:
+        var: docker_info.container.State.Status
+
+    - name: Run Docker Compose
+      community.docker.docker_compose:
+        project_src: fx-core-docker/{{ fxcore_network }}
+      register: docker_res
+
+    - name: Set fact
+      set_fact:
+        docker_id: "{{ docker_res.services.node.keys() | first }}"
+
+    - name: Check key files checksum (MD5)
+      changed_when: false
+      check_mode: false  # Force run in check mode.
+      community.docker.docker_container_exec:
+        argv:
+          - md5sum
+          - config/{{ item }}.json
+        chdir: '{{ fxcore_fxcored_home }}'
+        container: '{{ docker_id }}'
+      failed_when:
+        - md5_key_res.rc != 0  # File exists
+        - md5_key_res.rc != 1  # File does not exist
+      no_log: true
+      register: md5_key_res
+      loop: '{{ fxcore_validator_keys.keys() }}'
+
+    # @fixme: refactor this task when files are missing
+    - name: Update key files
+      community.docker.docker_container_exec:
+        argv:
+          - tee
+          - '{{ md5_key_res.results[item_index].stdout.split("  ")[1] }}'
+        chdir: '{{ fxcore_fxcored_home }}'
+        container: '{{ docker_id }}'
+        stdin: '{{ item.value | to_json }}'
+      no_log: true
+      loop: '{{ fxcore_validator_keys | dict2items }}'
+      loop_control:
+        index_var: item_index
+      register: result_status
+      when:
+        - >-
+          md5_key_res.results[item_index].rc == 1 or
+          md5_key_res.results[item_index].stdout.split("  ")[0] !=
+          (( item.value | to_json ~ '\n') | md5)
+
+    - name: Node Status
+      changed_when: false
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - status
+        container: '{{ docker_id }}'
+      register: node_status
+
+    - name: Set command args
+      set_fact:
+        fxcored_args: >-
+          {{ (fxcored_args | default([])) + ["--" ~ item.key] + [item.value] }}
+      loop: '{{ fxcore_fxcored_validator | dict2items }}'
+      when: fxcore_fxcored_validator is defined
+
+    - name: Update validator details
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv: >-
+          {{
+          ["/usr/bin/fxcored", "tx", "staking", "edit-validator"]
+          + fxcored_args
+          + ["--dry-run" if ansible_check_mode else "--trace"]
+          + ["--yes"]
+          }}
+        chdir: '{{ fxcore_fxcored_home }}'
+        container: '{{ docker_id }}'
+      register: update_res
+      when:
+        - fxcored_args is defined
+#       - not (node_status.stdout | from_json).SyncInfo.catching_up
+        - not (node_status.stderr | from_json).SyncInfo.catching_up
+
+    - name: Validator info
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - tendermint
+          - show-validator
+        chdir: '{{ fxcore_fxcored_home }}'
+        container: '{{ docker_id }}'
+      register: validator_info
+      when:
+#       - not (node_status.stdout | from_json).SyncInfo.catching_up
+        - not (node_status.stderr | from_json).SyncInfo.catching_up
+
+    - name: Unjail validator
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - tx
+          - slashing
+          - unjail
+          - --broadcast-mode
+          - block
+          - --from
+          - '{{ fxcore_fxcored_validator.from }}'
+          - --keyring-backend
+          - test
+          - '{{ "--dry-run" if ansible_check_mode else "--trace" }}'
+          - --yes
+          - --dry-run
+        chdir: '{{ fxcore_fxcored_home }}'
+        container: '{{ docker_id }}'
+      when:
+#       - not (node_status.stdout | from_json).SyncInfo.catching_up
+        - not (node_status.stderr | from_json).SyncInfo.catching_up

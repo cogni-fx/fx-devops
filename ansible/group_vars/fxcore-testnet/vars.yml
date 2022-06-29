@@ -1,8 +1,0 @@
----
-# Manage UNIX user accounts.
-users__accounts:
-
-  - name: fxcore
-    groups:
-      - docker
-    shell: /bin/bash

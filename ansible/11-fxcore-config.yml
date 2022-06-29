@@ -1,0 +1,92 @@
+---
+- name: Manage node config
+  collections:
+    - debops.debops
+
+  hosts:
+    - fxcore
+
+  become: true
+  become_flags: -i
+  become_user: fxcore
+
+  tasks:
+
+    - name: Run Docker Compose
+      community.docker.docker_compose:
+        project_src: fx-core-docker/{{ fxcore_network }}
+      register: docker_res
+
+    - name: Set fact
+      set_fact:
+        docker_id: "{{ docker_res.services.node.keys() | first }}"
+
+    - name: Node Status
+      changed_when: false
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - status
+        container: '{{ docker_id }}'
+      register: node_status
+
+    - name: Read config (app.toml)
+      changed_when: false
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - config
+          - app.toml
+          - '{{ item.key }}'
+        container: '{{ docker_id }}'
+      loop: '{{ fxcore_fxcored_config["app.toml"] | dict2items }}'
+      register: config_app_res
+      when: fxcore_fxcored_config["app.toml"] is defined
+
+    - name: Read config (config.toml)
+      changed_when: false
+      check_mode: false
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - config
+          - config.toml
+          - '{{ item.key }}'
+        container: '{{ docker_id }}'
+      loop: '{{ fxcore_fxcored_config["config.toml"] | dict2items }}'
+      register: config_config_res
+      when: fxcore_fxcored_config["config.toml"] is defined
+
+    - name: Update config (app.toml)
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - config
+          - app.toml
+          - '{{ item.key }}'
+          - '{{ item.value }}'
+        container: '{{ docker_id }}'
+      loop: '{{ fxcore_fxcored_config["app.toml"] | dict2items }}'
+      register: config_app_res
+      when: fxcore_fxcored_config["app.toml"] is defined
+
+    - name: Update config (config.toml)
+      community.docker.docker_container_exec:
+        argv:
+          - /usr/bin/fxcored
+          - config
+          - config.toml
+          - '{{ item.key }}'
+          - '{{ item.value }}'
+        container: '{{ docker_id }}'
+      loop: '{{ fxcore_fxcored_config["config.toml"] | dict2items }}'
+      register: config_config_res
+      when: fxcore_fxcored_config["config.toml"] is defined
+
+    - name: Docker Compose
+      community.docker.docker_compose:
+        project_src: fx-core-docker/{{ fxcore_network }}
+        restarted: true
+      when: not ansible_check_mode

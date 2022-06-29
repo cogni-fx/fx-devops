@@ -1,0 +1,16 @@
+---
+fxcore_docker_volume_names:
+  - fxcore-{{ fxcore_network }}-config
+  - fxcore-{{ fxcore_network }}-data
+fxcore_docker_volume_path: /var/opt
+
+# Enables debops.users to manage user accounts.
+users__enabled: true
+
+# Manage UNIX user accounts.
+users__accounts:
+
+  - name: fxcore
+    groups:
+      - docker
+    shell: /bin/bash
