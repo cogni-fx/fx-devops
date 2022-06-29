@@ -6,14 +6,18 @@ apt__keys:
   - url: https://download.docker.com/linux/ubuntu/gpg
 apt__packages:
   - binutils
-  - docker-ce
+  #  - docker-ce
   - git
+  - jq
   - net-tools
 apt__repositories:
   - repo: >-
       deb https://download.docker.com/linux/ubuntu
       {{ ansible_distribution_release }}
       stable
+
+docker_server__admins:
+  - fxcore
 
 docker_server__python__dependent_packages3:
   - python3-dev
@@ -30,7 +34,7 @@ fxcore_fxcored_config:
     API.Enable: false
   config.toml:
     log_level: warn
-    #moniker: Foo
+    # moniker: Foo
 
 # List of fxcored keys.
 fxcore_fxcored_keys: []
@@ -98,7 +102,7 @@ system_users__accounts:
 users__groups:
 
   - name: sudo
-    user: False
+    user: false
 
 # List of base APT packages to install.
 users__base_packages:
@@ -109,4 +113,4 @@ users__base_packages:
 system_users__base_packages: '{{ users__base_packages }}'
 
 # Ansible manage system user accounts.
-system_users__enabled: true
+system_users__enabled: false
