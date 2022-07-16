@@ -29,6 +29,8 @@
           - /usr/bin/fxcored
           - keys
           - list
+          - --keyring-backend
+          - test
           - --output
           - json
         container: '{{ docker_id }}'

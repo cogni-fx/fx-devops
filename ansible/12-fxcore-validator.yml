@@ -72,6 +72,8 @@
         argv:
           - /usr/bin/fxcored
           - status
+          - --output
+          - json
         container: '{{ docker_id }}'
       register: node_status
 
@@ -96,9 +98,9 @@
         container: '{{ docker_id }}'
       register: update_res
       when:
+        - false
         - fxcored_args is defined
-#       - not (node_status.stdout | from_json).SyncInfo.catching_up
-        - not (node_status.stderr | from_json).SyncInfo.catching_up
+        - not (node_status.stdout | from_json).SyncInfo.catching_up
 
     - name: Validator info
       check_mode: false
@@ -111,8 +113,7 @@
         container: '{{ docker_id }}'
       register: validator_info
       when:
-#       - not (node_status.stdout | from_json).SyncInfo.catching_up
-        - not (node_status.stderr | from_json).SyncInfo.catching_up
+        - not (node_status.stdout | from_json).SyncInfo.catching_up
 
     - name: Unjail validator
       check_mode: false
@@ -134,5 +135,4 @@
         chdir: '{{ fxcore_fxcored_home }}'
         container: '{{ docker_id }}'
       when:
-#       - not (node_status.stdout | from_json).SyncInfo.catching_up
-        - not (node_status.stderr | from_json).SyncInfo.catching_up
+        - not (node_status.stdout | from_json).SyncInfo.catching_up
