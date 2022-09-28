@@ -29,6 +29,8 @@
           - /usr/bin/fxcored
           - keys
           - list
+          - --keyring-backend
+          - test
           - --output
           - json
         container: '{{ docker_id }}'
@@ -49,6 +51,10 @@
           - keys
           - add
           - '{{ item.name }}'
+          - --algo
+          - secp256k1
+          - --coin-type
+          - 118
           - '{{ "--dry-run" if ansible_check_mode else "--trace" }}'
           - --index
           - '{{ item.index | default(0) }}'
