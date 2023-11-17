@@ -24,7 +24,7 @@
             dest: fx-core-docker
             force: true
             repo: https://github.com/cogni-fx/fx-core-docker.git
-            version: v4.2.1
+            version: v4.2.2
           become_user: fxcore
           name: Git repo
           register: git_res
