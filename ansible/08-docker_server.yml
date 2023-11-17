@@ -5,7 +5,7 @@
     - debops.roles01
 
   hosts:
-    - fxcore
+    - all
   become: true
 
   tasks:

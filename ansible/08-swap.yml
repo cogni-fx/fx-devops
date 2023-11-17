@@ -1,6 +1,6 @@
 ---
 - name: Create Swapfile
-  hosts: fxcore
+  hosts: all
   gather_facts: false
   become: true
 

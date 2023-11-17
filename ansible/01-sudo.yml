@@ -4,7 +4,7 @@
     - debops.debops
 
   gather_facts: true
-  hosts: fxcore
+  hosts: all
   become: true
 
   environment: '{{ inventory__environment | d({})

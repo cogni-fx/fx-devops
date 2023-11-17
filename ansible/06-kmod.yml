@@ -5,7 +5,7 @@
     - debops.debops
     - debops.roles01
 
-  hosts: fxcore
+  hosts: all
 
   pre_tasks:
 
