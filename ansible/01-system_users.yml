@@ -3,8 +3,13 @@
   collections:
     - debops.debops
 
+  gather_facts: true
   hosts: fxcore
   become: true
+
+  environment: '{{ inventory__environment | d({})
+                   | combine(inventory__group_environment | d({}))
+                   | combine(inventory__host_environment  | d({})) }}'
 
   roles:
 
