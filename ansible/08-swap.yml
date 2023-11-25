@@ -33,7 +33,8 @@
 
     - name: Activate swapfile
       ansible.builtin.command: swapon -av
-      changed_when: true
+      changed_when: "'ignored' not in cmd_result.stderr"
+      register: cmd_result
 
     - name: Add swap entry to /etc/fstab
       ansible.builtin.lineinfile:
