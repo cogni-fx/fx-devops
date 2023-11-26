@@ -6,7 +6,7 @@
 
   vars:
     swapfile: /var/cache/swapfile
-    size: 4g
+    size: 6g
 
   tasks:
     - name: Check if swapfile exists
