@@ -98,7 +98,7 @@
         container: '{{ docker_id }}'
       register: update_res
       when:
-        - false
+        - true
         - fxcored_args is defined
         - not (node_status.stdout | from_json).SyncInfo.catching_up
 
