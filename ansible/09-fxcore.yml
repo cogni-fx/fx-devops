@@ -3,9 +3,12 @@
   collections:
     - debops.debops
 
-  hosts: fxcore
+  hosts:
+    - fxcore
+
   become: true
   become_flags: -i
+  become_user: fxcore
 
   tasks:
     - name: Admin tasks

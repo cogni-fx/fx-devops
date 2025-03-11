@@ -13,13 +13,13 @@
   tasks:
 
     - name: Run Docker Compose
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2:
         project_src: fx-core-docker/{{ fxcore_network }}
-      register: docker_res
+      register: output
 
     - name: Set fact
       set_fact:
-        docker_id: "{{ docker_res.services.node.keys() | first }}"
+        docker_id: "{{ (output.containers | selectattr('Service', 'equalto', 'node') | list | first).ID }}"
 
     - name: List keys
       changed_when: false
